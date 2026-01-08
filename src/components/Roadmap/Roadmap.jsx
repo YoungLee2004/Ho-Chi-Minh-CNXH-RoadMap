@@ -1,21 +1,37 @@
-
+import { stagesData } from "../../data/stagesData";
 import RoadmapItem from "./RoadmapItem";
-import { roadmapData } from "../../data/roadmapData";
 import "./Roadmap.css";
 
-const Roadmap = () => {
+export default function Roadmap() {
   return (
-    <section className="roadmap">
-      <h2>Con đường quá độ lên CNXH ở Việt Nam</h2>
-      {roadmapData.map((step) => (
-        <RoadmapItem
-          key={step.id}
-          title={step.title}
-          content={step.content}
-        />
-      ))}
-    </section>
-  );
-};
+    <div className="roadmap-container">
+      <div className="roadmap-hero">
+        <p className="roadmap-kicker">Poster · Con đường quá độ lên CNXH</p>
+        <h1 className="roadmap-title">
+          Lộ trình tư tưởng Hồ Chí Minh về CNXH
+        </h1>
+        <p className="roadmap-subtitle">
+          Bố cục trái → phải, rõ khối, ít chữ; nhấn màu đỏ – vàng – xanh nhạt và điểm nhấn tím cho đích đến. Hover để xem chi tiết từng chặng.
+        </p>
+        <div className="roadmap-palette">
+          <span className="swatch swatch-red" aria-label="Đỏ" />
+          <span className="swatch swatch-gold" aria-label="Vàng" />
+          <span className="swatch swatch-green" aria-label="Xanh nhạt" />
+          <span className="swatch swatch-blue" aria-label="Xanh dương" />
+          <span className="swatch swatch-purple" aria-label="Tím đích đến" />
+        </div>
+        <p className="roadmap-quote">“Không có gì quý hơn độc lập, tự do.”</p>
+      </div>
 
-export default Roadmap;
+      <div className="timeline">
+        {stagesData.map((stage, index) => (
+          <RoadmapItem
+            key={stage.id}
+            stage={stage}
+            index={index}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
