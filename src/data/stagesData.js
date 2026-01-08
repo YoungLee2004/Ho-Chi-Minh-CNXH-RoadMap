@@ -7,6 +7,7 @@ export const stagesData = [
   {
     id: 1,
     title: "Chặng 1: Tính chất của thời kỳ quá độ",
+    shortTitle: "Tính chất QĐ",
     subtitle: "Xuất phát – cải biến sâu sắc nhất",
     icon: "⏳⚙️",
     shortDesc:
@@ -28,6 +29,7 @@ export const stagesData = [
   {
     id: 2,
     title: "Chặng 2: Đặc điểm thời kỳ quá độ",
+    shortTitle: "Đặc điểm QĐ",
     subtitle: "Đan xen cũ/mới, tiến thẳng lên CNXH",
     icon: "🔀🌱",
     shortDesc:
@@ -47,6 +49,7 @@ export const stagesData = [
   {
     id: 3,
     title: "Chặng 3: Nhiệm vụ của thời kỳ quá độ",
+    shortTitle: "Nhiệm vụ QĐ",
     subtitle: "Trọng tâm, nhiều mảng việc song song",
     icon: "🏛️⚙️🌾🎓👥",
     shortDesc:
@@ -97,7 +100,8 @@ export const stagesData = [
   },
   {
     id: 4,
-    title: "Chặng 4: Nguyên tắc xây dựng CNXH",
+    thortTitle: "Nguyên tắc",
+    sitle: "Chặng 4: Nguyên tắc xây dựng CNXH",
     subtitle: "Kim chỉ nam và lá chắn",
     icon: "🧭🛑🛡️",
     shortDesc:
@@ -116,7 +120,8 @@ export const stagesData = [
     quote: "Không có gì quý hơn độc lập, tự do. Độc lập là nền tảng bền vững của CNXH.",
   },
   {
-    id: 5,
+    ihortTitle: "Đích đến",
+    sd: 5,
     title: "Đích đến: CNXH phù hợp Việt Nam",
     subtitle: "Độc lập – Dân chủ – Giàu mạnh – Hạnh phúc",
     icon: "🏁",
