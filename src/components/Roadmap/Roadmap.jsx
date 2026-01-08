@@ -11,7 +11,7 @@ export default function Roadmap() {
           Lộ trình tư tưởng Hồ Chí Minh về CNXH
         </h1>
         <p className="roadmap-subtitle">
-          Bố cục trái → phải, rõ khối, ít chữ; nhấn màu đỏ – vàng – xanh nhạt và điểm nhấn tím cho đích đến. Hover để xem chi tiết từng chặng.
+         
         </p>
         <div className="roadmap-palette">
           <span className="swatch swatch-red" aria-label="Đỏ" />
