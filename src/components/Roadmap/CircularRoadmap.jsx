@@ -1,31 +1,57 @@
+// src/components/Roadmap/CircularRoadmap.jsx
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import "./RoadroadmapStyle.css";
+
+// --- LINK ẢNH ---
+const trongDongBg = "https://png.pngtree.com/background/20220805/original/pngtree-vietnam-dong-son-bronze-drum-pattern-print-background-picture-image_1915087.jpg"; 
+const uncleHoIconUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Ho_Chi_Minh_1946.jpg/220px-Ho_Chi_Minh_1946.jpg";
 
 export default function CircularRoadmap({ stagesData }) {
   const [selectedStage, setSelectedStage] = useState(null);
   const [displayStage, setDisplayStage] = useState(null);
-  const [travelerPos, setTravelerPos] = useState({ x: 120, y: 480 });
-  const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  // Vị trí mặc định ban đầu
+  const [travelerPos, setTravelerPos] = useState({ x: 450, y: 160 });
 
-  const getCheckpointPosition = (index) => {
-    const positions = [
-      { x: 120, y: 480 },
-      { x: 300, y: 320 },
-      { x: 480, y: 400 },
-      { x: 660, y: 280 },
-      { x: 800, y: 440 },
-    ];
-    return positions[index] || { x: 0, y: 0 };
+  // --- CẤU HÌNH KÍCH THƯỚC & VỊ TRÍ (Đã tinh chỉnh lại) ---
+  const CX = 450; 
+  const CY = 500; // Hạ thấp thêm chút nữa để cân giữa khung 920
+  const R = 300;  
+  const r = 115;  
+
+  const getStarPoint = (angle, radius) => {
+    const rad = (angle - 90) * (Math.PI / 180);
+    return {
+      x: CX + radius * Math.cos(rad),
+      y: CY + radius * Math.sin(rad)
+    };
   };
 
-  // Khi selectedStage thay đổi, delay hiển thị displayStage
+  const checkpointAngles = [0, 72, 144, 216, 288]; 
+  
+  const getCheckpointPosition = (index) => {
+    return getStarPoint(checkpointAngles[index], R);
+  };
+
+  const createStarPath = () => {
+    let path = "";
+    for (let i = 0; i < 5; i++) {
+      const tip = getStarPoint(i * 72, R);      
+      const valley = getStarPoint(i * 72 + 36, r); 
+      if (i === 0) path += `M ${tip.x} ${tip.y} `; 
+      else path += `L ${tip.x} ${tip.y} `;         
+      path += `L ${valley.x} ${valley.y} `;        
+    }
+    path += "Z"; 
+    return path;
+  };
+
   useEffect(() => {
     if (selectedStage) {
-      // Ngay lập tức di chuyển nhân vật, nhưng delay hiển thị info
       const timer = setTimeout(() => {
         setDisplayStage(selectedStage);
-      }, 2500); // 2.5 giây (bằng animation duration)
+      }, 800);
       return () => clearTimeout(timer);
     } else {
       setDisplayStage(null);
@@ -38,268 +64,283 @@ export default function CircularRoadmap({ stagesData }) {
     setTravelerPos(newPos);
   };
 
-  const handleDetailClick = (stageId) => {
-    navigate(`/stage/${stageId}`);
+  const handleOpenModal = () => {
+    if (displayStage) setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  // --- TINH CHỈNH LABEL ---
+  const getLabelStyle = (index) => {
+    const pos = getCheckpointPosition(index);
+    const deltaX = pos.x - CX;
+    const deltaY = pos.y - CY;
+    const distance = Math.sqrt(deltaX*deltaX + deltaY*deltaY);
+    
+    // Tăng lực đẩy (pushFactor) lên 120 để label xa đỉnh sao hơn
+    const pushFactor = 120 / distance; 
+    
+    return {
+      transform: `translate(${deltaX * pushFactor}px, ${deltaY * pushFactor}px)`
+    };
   };
 
   return (
-    <div className="road-roadmap">
-      <div className="roadmap-hero">
-        <p className="roadmap-kicker">🛣️ Roadmap Con Đường · CNXH</p>
-        <h1 className="roadmap-title">Hành Trình Tư Tưởng Hồ Chí Minh</h1>
-        <p className="roadmap-subtitle">
-          Khám phá từng chặng trên con đường tới chủ nghĩa xã hội
-        </p>
-      </div>
+    <div 
+      className="road-roadmap"
+      style={{
+        backgroundImage: `url(${trongDongBg})`, 
+        backgroundSize: "cover", 
+        backgroundPosition: "center 60%", 
+        backgroundRepeat: "no-repeat",
+        minHeight: "100vh",
+        position: "relative",
+        backgroundColor: "#d32f2f" 
+      }}
+    >
+      <div 
+        style={{
+          position: "absolute",
+          inset: 0,
+          backgroundColor: "#b71c1c", 
+          mixBlendMode: "multiply",   
+          opacity: 0.7, 
+          zIndex: 1
+        }} 
+      />
+      
+      <div 
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: "radial-gradient(circle, transparent 40%, rgba(0,0,0,0.6) 100%)",
+          zIndex: 2,
+          pointerEvents: "none"
+        }} 
+      />
 
-      <div className="road-container">
-        <svg className="road-svg" viewBox="0 0 900 600">
-          <defs>
-            <linearGradient id="roadGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#3d3d3d" />
-              <stop offset="50%" stopColor="#252525" />
-              <stop offset="100%" stopColor="#1a1a1a" />
-            </linearGradient>
-            <linearGradient id="roadLine" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="rgba(255, 255, 255, 0.3)" />
-              <stop offset="50%" stopColor="rgba(255, 255, 255, 0.6)" />
-              <stop offset="100%" stopColor="rgba(255, 255, 255, 0.3)" />
-            </linearGradient>
-          </defs>
+      <div className="roadmap-content-wrapper" style={{ position: "relative", zIndex: 10 }}>
+        
+        <div className="roadmap-hero" style={{ paddingTop: "20px" }}>
+          <p className="roadmap-kicker" style={{ color: "#fbbf24", borderColor: "#fbbf24" }}>🛣️ Tư tưởng Hồ Chí Minh</p>
+          <h1 className="roadmap-title" style={{ color: "#fff", textShadow: "0 2px 10px rgba(0,0,0,0.8)" }}>
+            Con đường đi lên CNXH
+          </h1>
+        </div>
 
-          <path
-            d="M 80 480 Q 200 400, 300 320 T 480 400 T 660 280 L 800 440"
-            fill="none"
-            stroke="url(#roadGradient)"
-            strokeWidth="90"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="road-path"
-          />
+        <div className="road-container" style={{ background: "transparent", boxShadow: "none", padding: "0" }}>
+          
+          {/* Tăng height viewBox lên 920 để chứa label bên dưới cùng */}
+          <svg className="road-svg" viewBox="0 0 900 920" style={{ overflow: "visible" }}>
+            <defs>
+              <linearGradient id="starGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor="#ffff00" /> 
+                <stop offset="100%" stopColor="#ffab00" /> 
+              </linearGradient>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+                <feMerge>
+                  <feMergeNode in="coloredBlur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
 
-          <path
-            d="M 80 480 Q 200 400, 300 320 T 480 400 T 660 280 L 800 440"
-            fill="none"
-            stroke="url(#roadLine)"
-            strokeWidth="10"
-            strokeDasharray="25,12"
-            strokeLinecap="round"
-            className="road-line"
-          />
+            {/* NGÔI SAO */}
+            <path
+              d={createStarPath()}
+              fill="#FFD700"    
+              fillOpacity="0.85" 
+              stroke="#FFFF00"
+              strokeWidth="6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              style={{ filter: "drop-shadow(0 0 30px rgba(255, 215, 0, 0.7))" }}
+            />
 
-          <g
-            className="traveler"
-            style={{
-              transform: `translate(${travelerPos.x}px, ${travelerPos.y}px)`,
-              transition: "transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
-            }}
-          >
-            <ellipse cx="0" cy="28" rx="16" ry="6" fill="#000" opacity="0.15" />
-            <g className="traveler-body">
-              <circle cx="0" cy="-8" r="10" fill="#f9a825" stroke="#d8872a" strokeWidth="2" />
-              <circle cx="-4" cy="-10" r="2" fill="#000" />
-              <circle cx="4" cy="-10" r="2" fill="#000" />
-              <path d="M -3 -5 Q 0 -3 3 -5" stroke="#000" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-              <rect x="-7" y="2" width="14" height="16" rx="3" fill="#2563eb" stroke="#1e40af" strokeWidth="2" />
-              <circle cx="0" cy="8" r="5" fill="rgba(255,255,255,0.3)" />
-              <line x1="-7" y1="4" x2="-14" y2="2" stroke="#f9a825" strokeWidth="2.5" strokeLinecap="round" />
-              <circle cx="-14" cy="2" r="3" fill="#f9a825" />
-              <line x1="7" y1="4" x2="14" y2="2" stroke="#f9a825" strokeWidth="2.5" strokeLinecap="round" />
-              <circle cx="14" cy="2" r="3" fill="#f9a825" />
-              <line x1="-4" y1="18" x2="-6" y2="28" stroke="#333" strokeWidth="2.5" strokeLinecap="round" />
-              <ellipse cx="-6" cy="30" rx="4" ry="3" fill="#333" />
-              <line x1="4" y1="18" x2="6" y2="28" stroke="#333" strokeWidth="2.5" strokeLinecap="round" />
-              <ellipse cx="6" cy="30" rx="4" ry="3" fill="#333" />
-            </g>
-          </g>
+            {/* Checkpoints */}
+            {stagesData.map((stage, index) => {
+              const pos = getCheckpointPosition(index);
+              const isSelected = selectedStage?.id === stage.id;
+              const labelStyle = getLabelStyle(index);
 
-          {stagesData.map((stage, index) => {
-            const pos = getCheckpointPosition(index);
-            const isSelected = selectedStage?.id === stage.id;
+              return (
+                <g key={`checkpoint-${stage.id}`} style={{ cursor: "pointer" }} onClick={() => handleNodeClick(stage, index)}>
+                  <circle
+                    cx={pos.x}
+                    cy={pos.y}
+                    r={isSelected ? 40 : 32} 
+                    fill="#fff"
+                    stroke={stage.theme.primary}
+                    strokeWidth="5"
+                    className="checkpoint-circle"
+                  />
+                  
+                  <text
+                    x={pos.x}
+                    y={pos.y}
+                    dy="0.35em"
+                    textAnchor="middle"
+                    fill={stage.theme.primary}
+                    fontSize="20"
+                    fontWeight="900"
+                  >
+                    {index + 1}
+                  </text>
 
-            return (
-              <g key={`checkpoint-${stage.id}`}>
-                <circle
-                  cx={pos.x}
-                  cy={pos.y}
-                  r="42"
-                  fill={stage.theme.primary}
-                  className={`checkpoint-circle ${isSelected ? "selected" : ""}`}
-                  onClick={() => handleNodeClick(stage, index)}
-                  style={{ cursor: "pointer" }}
+                  {/* LABEL GROUP */}
+                  <g transform={`translate(${pos.x}, ${pos.y})`}>
+                    <g style={labelStyle}>
+                        {/* Box label to hơn: width 200, height 46 */}
+                        <rect 
+                          x={-100} 
+                          y={-23} 
+                          width="200" 
+                          height="46" 
+                          rx="23" 
+                          fill="white"
+                          stroke={stage.theme.primary}
+                          strokeWidth="2"
+                          style={{ filter: "drop-shadow(0 4px 6px rgba(0,0,0,0.3))" }}
+                        />
+                        {/* Font chữ to hơn: 16px */}
+                        <text
+                          x="0"
+                          y="6"
+                          textAnchor="middle"
+                          fill="#1a1a1a"
+                          fontSize="16"
+                          fontWeight="bold"
+                        >
+                          {stage.shortTitle}
+                        </text>
+                    </g>
+                  </g>
+                </g>
+              );
+            })}
+
+            {/* Traveler */}
+            <foreignObject
+              x={travelerPos.x - 50} 
+              y={travelerPos.y - 50}
+              width="100"
+              height="100"
+              style={{
+                transition: "all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+                pointerEvents: "none",
+                overflow: "visible" 
+              }}
+            >
+              <div style={{
+                width: "100%",
+                height: "100%",
+                borderRadius: "50%",
+                border: "4px solid #fff",
+                boxShadow: "0 0 30px #ffff00", 
+                overflow: "hidden",
+                backgroundColor: "#fff",
+                position: "relative"
+              }}>
+                <img 
+                  src={uncleHoIconUrl} 
+                  alt="Traveler" 
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 />
-                <circle
-                  cx={pos.x}
-                  cy={pos.y}
-                  r="35"
-                  fill="white"
-                  className="checkpoint-inner"
-                  onClick={() => handleNodeClick(stage, index)}
-                  style={{ cursor: "pointer" }}
-                />
-                <text
-                  x={pos.x}
-                  y={pos.y}
-                  textAnchor="middle"
-                  dy="0.3em"
-                  className="checkpoint-icon-text"
-                  fill={stage.theme.primary}
-                  onClick={() => handleNodeClick(stage, index)}
-                  style={{ cursor: "pointer" }}
-                >
-                  {stage.icon}
-                </text>
-                <line
-                  x1={pos.x + (index % 2 === 0 ? -50 : 50)}
-                  y1={pos.y - 60}
-                  x2={pos.x + (index % 2 === 0 ? -50 : 50)}
-                  y2={pos.y - 100}
-                  stroke={stage.theme.primary}
-                  strokeWidth="2"
-                  opacity="0.3"
-                />
-                <rect
-                  x={pos.x + (index % 2 === 0 ? -140 : 20)}
-                  y={pos.y - 125}
-                  width="120"
-                  height="50"
-                  rx="8"
-                  fill="white"
-                  stroke={stage.theme.primary}
-                  strokeWidth="2"
-                  className="label-bg"
-                />
-                <text
-                  x={pos.x + (index % 2 === 0 ? -80 : 80)}
-                  y={pos.y - 105}
-                  textAnchor="middle"
-                  className="checkpoint-label"
-                  fill={stage.theme.primary}
-                  onClick={() => handleNodeClick(stage, index)}
-                  style={{ cursor: "pointer" }}
-                >
-                  {stage.shortTitle || `Chặng ${index + 1}`}
-                </text>
-                <text
-                  x={pos.x + (index % 2 === 0 ? -80 : 80)}
-                  y={pos.y - 88}
-                  textAnchor="middle"
-                  className="checkpoint-number"
-                  fill="#666"
-                  fontSize="12"
-                  onClick={() => handleNodeClick(stage, index)}
-                  style={{ cursor: "pointer" }}
-                >
-                  {stage.isDestination ? "Đích" : `#${index + 1}`}
-                </text>
-              </g>
-            );
-          })}
-        </svg>
+              </div>
+            </foreignObject>
 
-        <div className="road-info-panel">
-          {displayStage ? (
-            <div className="stage-tooltip" key={displayStage.id}>
-              <div className="tooltip-header">
-                <div
-                  className="tooltip-badge"
+          </svg>
+
+          {/* Info Panel */}
+          <div className="road-info-panel" style={{ marginTop: "-10px", position: "relative", zIndex: 20 }}>
+            {displayStage ? (
+              <div 
+                className="stage-tooltip active" 
+                style={{ 
+                    borderTop: `5px solid ${displayStage.theme.primary}`
+                }}
+              >
+                <div className="tooltip-header">
+                  <span className="tooltip-icon" style={{ fontSize: "28px" }}>{displayStage.icon}</span>
+                  <div className="tooltip-title-group">
+                    <h3>{displayStage.title}</h3>
+                    <p>{displayStage.subtitle}</p>
+                  </div>
+                </div>
+                <p className="tooltip-desc">{displayStage.shortDesc}</p>
+                <button
+                  className="tooltip-button"
+                  onClick={(e) => {
+                      e.stopPropagation();
+                      handleOpenModal(); 
+                  }}
                   style={{ backgroundColor: displayStage.theme.primary }}
                 >
-                  {displayStage.isDestination ? "🎯" : `#${displayStage.index + 1}`}
-                </div>
-                <h3 className="tooltip-title">{displayStage.title}</h3>
+                  Xem toàn bộ nội dung (Popup) →
+                </button>
               </div>
-              <p className="tooltip-desc">{displayStage.shortDesc}</p>
-              <button
-                className="tooltip-button"
-                onClick={() => handleDetailClick(displayStage.id)}
-                style={{ backgroundColor: displayStage.theme.primary }}
-              >
-                Xem Chi Tiết →
-              </button>
-            </div>
-          ) : (
-            <div className="info-empty">
-              <p className="empty-icon">👇</p>
-              <p className="empty-text">Bấm vào một chặng trên con đường để xem chi tiết</p>
-            </div>
-          )}
+            ) : (
+              <div className="info-empty">
+                <p>👇 Bấm vào các đỉnh ngôi sao để xem nội dung</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
-      {selectedStage && (
-        <div className="modal-backdrop" onClick={() => setSelectedStage(null)}>
-          <div
-            className="modal-detail"
+      {/* Modal Popup - Không thay đổi */}
+      {isModalOpen && displayStage && (
+        <div className="roadmap-modal-overlay" onClick={handleCloseModal}>
+          <div 
+            className="roadmap-modal-container" 
             onClick={(e) => e.stopPropagation()}
-            style={{ borderTopColor: selectedStage.theme.primary }}
           >
-            <button
-              className="modal-close"
-              onClick={() => setSelectedStage(null)}
-              aria-label="Close"
-            >
-              ✕
-            </button>
-            <div className="modal-body">
-              {selectedStage.image && (
-                <div className="modal-image-wrapper">
-                  <img
-                    src={selectedStage.image}
-                    alt={selectedStage.title}
-                    className="modal-image"
-                  />
-                </div>
+            <button className="roadmap-modal-close" onClick={handleCloseModal}>✕</button>
+
+            <div className="roadmap-modal-header">
+              <div className="modal-stage-label">CHẶNG {displayStage.id}</div>
+              <h2>{displayStage.title}</h2>
+              <p>{displayStage.subtitle}</p>
+            </div>
+
+            <div className="roadmap-modal-body">
+              {displayStage.image && (
+                <img 
+                  src={displayStage.image} 
+                  alt={displayStage.title} 
+                  className="modal-hero-image"
+                />
               )}
-              <div className="modal-content">
-                <div className="modal-header">
-                  <div
-                    className="modal-icon"
-                    style={{
-                      backgroundImage: `linear-gradient(135deg, ${selectedStage.theme.primary}, ${selectedStage.theme.secondary})`,
-                    }}
-                  >
-                    {selectedStage.icon}
-                  </div>
-                  <div>
-                    <p
-                      className="modal-badge"
-                      style={{ color: selectedStage.theme.primary }}
-                    >
-                      {selectedStage.isDestination
-                        ? "🎯 ĐÍCH ĐẾN"
-                        : `Chặng ${selectedStage.index + 1}`}
-                    </p>
-                    <h2 className="modal-title">{selectedStage.title}</h2>
-                    {selectedStage.subtitle && (
-                      <p className="modal-subtitle">{selectedStage.subtitle}</p>
-                    )}
-                  </div>
+              <p className="modal-intro-text">{displayStage.shortDesc}</p>
+              {displayStage.sections && displayStage.sections.length > 0 ? (
+                <div className="modal-sections-grid">
+                  {displayStage.sections.map((sec, idx) => (
+                    <div key={idx} className="modal-section-card" style={{ borderLeftColor: displayStage.theme.primary }}>
+                      <h3 style={{ color: displayStage.theme.primary }}>{sec.heading}</h3>
+                      <ul>
+                        {sec.points.map((pt, i) => (
+                          <li key={i}>{pt}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
                 </div>
-                {selectedStage.shortDesc && (
-                  <p className="modal-description">{selectedStage.shortDesc}</p>
-                )}
-                <ul className="modal-bullets">
-                  {selectedStage.bullets?.map((bullet, i) => (
-                    <li key={i}>{bullet}</li>
+              ) : (
+                <ul className="modal-bullets-list">
+                  {displayStage.bullets?.map((bull, i) => (
+                    <li key={i}>{bull}</li>
                   ))}
                 </ul>
-                {selectedStage.quote && (
-                  <blockquote className="modal-quote">
-                    {selectedStage.quote}
-                  </blockquote>
-                )}
-                <button
-                  className="modal-action-button"
-                  onClick={() => handleDetailClick(selectedStage.id)}
-                  style={{
-                    background: selectedStage.theme.primary,
-                    color: "white",
-                  }}
-                >
-                  Xem Trang Chi Tiết →
-                </button>
-              </div>
+              )}
+              {displayStage.quote && (
+                <div className="modal-quote-box">
+                  <p>“{displayStage.quote}”</p>
+                  <span>— Hồ Chí Minh</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
