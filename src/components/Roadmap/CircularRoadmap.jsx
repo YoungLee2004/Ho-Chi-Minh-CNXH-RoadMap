@@ -376,11 +376,18 @@ export default function CircularRoadmap({ stagesData }) {
 
             <div className="roadmap-modal-body">
               {displayStage.image && (
-                <img 
-                  src={displayStage.image} 
-                  alt={displayStage.title} 
-                  className="modal-hero-image"
-                />
+                <>
+                  <img 
+                    src={displayStage.image} 
+                    alt={displayStage.title} 
+                    className="modal-hero-image"
+                  />
+                  {displayStage.imageSource && (
+                    <p style={{ fontSize: "12px", color: "#666", marginTop: "-20px", marginBottom: "20px", fontStyle: "italic" }}>
+                      Nguồn Ảnh: <a href={displayStage.imageSource} target="_blank" rel="noopener noreferrer" style={{ color: "#d32f2f", textDecoration: "none" }}>{displayStage.imageSource}</a>
+                    </p>
+                  )}
+                </>
               )}
               <p className="modal-intro-text">{displayStage.shortDesc}</p>
               {displayStage.sections && displayStage.sections.length > 0 ? (

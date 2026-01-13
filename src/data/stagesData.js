@@ -9,6 +9,7 @@ export const stagesData = [
     shortTitle: "Bản chất",
     subtitle: "Tính chất & Thông điệp cốt lõi",
     icon: "🚩", 
+  
     shortDesc: "Thời kỳ cải biến xã hội sâu sắc nhất, phức tạp, lâu dài, khó khăn và gian khổ.",
     // Nội dung tóm tắt hiển thị ở thẻ nhỏ bên ngoài
     bullets: [
@@ -20,6 +21,7 @@ export const stagesData = [
     sections: [
       {
         heading: "1. Nội dung cốt lõi",
+        image: "hcm11.jpg",
         points: [
           "Thời kỳ quá độ là thời kỳ cải biến xã hội sâu sắc nhất.",
           "Đây là một quá trình phức tạp, lâu dài.",
@@ -29,6 +31,7 @@ export const stagesData = [
       },
       {
         heading: "2. Mục tiêu cụ thể",
+        image: "hcm11.jpg",
         points: [
           "Xây dựng một xã hội chưa từng có trong lịch sử dân tộc Việt Nam.",
           "Phải xóa bỏ giai cấp bóc lột.",
@@ -38,6 +41,7 @@ export const stagesData = [
       },
       {
         heading: "3. Thông điệp trọng tâm",
+        image: "hcm11.jpg",
         points: [
           "Tiến lên chủ nghĩa xã hội không thể nóng vội, không thể một sớm một chiều.",
           "Phải làm dần dần, vững chắc.",
@@ -48,7 +52,8 @@ export const stagesData = [
       primary: "#d32f2f", 
       secondary: "#ff6659",
     },
-    image: `${imgBase}1535024966967-7681cdf3f169?auto=format&fit=crop&w=800&q=80`,
+    image: "https://kinhtevadubao.vn/stores/news_dataimages/hoenh/052023/31/16/ly-luan-ve-thoi-ky-qua-do-len-chu-nghia-xa-hoi-o-viet-nam-tu-di-san-vo-gia-cua-chu-tich-ho-chi-minh-den-ly-luan-sau-sac-cua-tong-bi-thu-nguyen-phu-trong_2.jpg?rt=20230531163300",
+    imageSource: "https://kinhtevadubao.vn/",
     quote: "Tiến lên chủ nghĩa xã hội không thể nóng vội, không thể một sớm một chiều, mà phải làm dần dần, vững chắc.",
   },
   {
@@ -97,7 +102,8 @@ export const stagesData = [
       primary: "#f57c00", 
       secondary: "#ffb74d",
     },
-    image: `${imgBase}1580191947425-c6913d379c35?auto=format&fit=crop&w=800&q=80`,
+    image: "https://thuviennguyenvanhuong.vn/wp-content/uploads/2020/07/le-fleuve-nourricier-2-825x510.jpg",
+    imageSource: "https://thuviennguyenvanhuong.vn/",
     quote: "Đặc điểm lớn nhất của ta là từ một nước nông nghiệp lạc hậu tiến thẳng lên chủ nghĩa xã hội không phải kinh qua giai đoạn phát triển tư bản chủ nghĩa.",
   },
   {
@@ -152,7 +158,8 @@ export const stagesData = [
       primary: "#0288d1", 
       secondary: "#5eb8ff",
     },
-    image: `${imgBase}1504917595217-d4dc5ebe5120?auto=format&fit=crop&w=800&q=80`,
+    image: "https://nads.1cdn.vn/2024/06/05/W_duong-trang-tien-hn.jpg",
+    imageSource: "https://nhiepanhdoisong.vn/",
     quote: "Nhiệm vụ quan trọng nhất là xây dựng nền tảng vật chất và kỹ thuật của chủ nghĩa xã hội.",
   },
   {
@@ -204,7 +211,8 @@ export const stagesData = [
       primary: "#388e3c", 
       secondary: "#66bb6a",
     },
-    image: `${imgBase}1531206715517-5c0ba140b2b8?auto=format&fit=crop&w=800&q=80`,
+    image: "https://doanthanhnien.vn/Content/uploads/images/132863619830151722_thinhvuongvietnamcom229122021112007.jpg",
+    imageSource: "https://doanthanhnien.vn/",
     quote: "Muốn xây dựng chủ nghĩa xã hội, trước hết cần có những con người xã hội chủ nghĩa.",
   },
   {
@@ -265,7 +273,8 @@ export const stagesData = [
       primary: "#c2185b",
       secondary: "#f48fb1",
     },
-    image: `${imgBase}1532375810709-75b1da00537c?auto=format&fit=crop&w=800&q=80`,
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTL85AqmJruGShR8fv3MDUtooBhp6_3sZiZkA&s",
+    imageSource: "https://baodautu.vn/",
     quote: "Xây dựng chủ nghĩa xã hội ở Việt Nam là một sự nghiệp vì con người, do con người, và vì hạnh phúc của toàn dân tộc.",
   },
 ];

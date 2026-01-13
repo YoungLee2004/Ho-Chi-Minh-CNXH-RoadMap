@@ -7,6 +7,16 @@ export default function Stage() {
   const navigate = useNavigate();
   const stage = stagesData.find((item) => item.id === Number(id));
 
+  // Hàm để import ảnh động
+  const getLocalImage = (imageName) => {
+    if (!imageName) return null;
+    try {
+      return new URL(`../assets/icons/${imageName}`, import.meta.url).href;
+    } catch {
+      return null;
+    }
+  };
+
   if (!stage) {
     return <div style={{ padding: 40, textAlign: "center" }}>
       <h2>Không tìm thấy dữ liệu</h2>
@@ -51,22 +61,35 @@ export default function Stage() {
         }}
       >
         {/* Header */}
-        <div style={{ background: gradient, color: "#fff", padding: "40px" }}>
-            <div style={{ textTransform: "uppercase", letterSpacing: "1px", fontSize: "0.9rem", opacity: 0.9 }}>
+        <div style={{ background: gradient, padding: "40px" }}>
+            <div style={{ textTransform: "uppercase", letterSpacing: "1px", fontSize: "0.9rem", fontWeight: "700", color: "#000 !important" }}>
                 {stage.isDestination ? "Đích đến" : `Chặng số ${stage.id}`}
             </div>
-            <h1 style={{ marginTop: "10px", fontSize: "2.5rem" }}>{stage.title}</h1>
-            <p style={{ fontSize: "1.2rem", opacity: 0.9 }}>{stage.subtitle}</p>
+            <h1 style={{ marginTop: "10px", fontSize: "2.5rem", color: "#000 !important", fontWeight: "800" }}>{stage.title}</h1>
+            <p style={{ fontSize: "1.2rem", color: "#000 !important", fontWeight: "600" }}>{stage.subtitle}</p>
         </div>
 
         <div style={{ padding: "40px" }}>
-            {/* Ảnh minh họa */}
-            {stage.image && (
-                <img 
-                    src={stage.image} 
-                    alt={stage.title} 
-                    style={{ width: "100%", height: "300px", objectFit: "cover", borderRadius: "12px", marginBottom: "30px" }}
-                />
+            {/* Ảnh local (từ assets/icons) */}
+            {stage.localImage && (
+                <div style={{ display: "flex", justifyContent: "center", marginBottom: "30px", background: "#f5f5f5", borderRadius: "12px", padding: "20px" }}>
+                    <img 
+                        src={getLocalImage(stage.localImage)}
+                        alt={stage.title} 
+                        style={{ maxWidth: "100%", maxHeight: "600px", objectFit: "contain", borderRadius: "8px" }}
+                    />
+                </div>
+            )}
+
+            {/* Ảnh từ URL */}
+            {stage.image && !stage.localImage && (
+                <div style={{ display: "flex", justifyContent: "center", marginBottom: "30px", background: "#f5f5f5", borderRadius: "12px", padding: "20px" }}>
+                    <img 
+                        src={stage.image} 
+                        alt={stage.title} 
+                        style={{ maxWidth: "100%", maxHeight: "600px", objectFit: "contain", borderRadius: "8px" }}
+                    />
+                </div>
             )}
 
             {/* Mô tả ngắn */}
@@ -82,9 +105,9 @@ export default function Stage() {
                     {stage.sections.map((sec, idx) => (
                         <div key={idx} style={{ background: "#f8f9fa", padding: "20px", borderRadius: "10px", borderLeft: `4px solid ${stage.theme.primary}` }}>
                             <h3 style={{ color: stage.theme.primary, marginTop: 0 }}>{sec.heading}</h3>
-                            <ul style={{ paddingLeft: "20px", margin: 0 }}>
+                            <ul style={{ paddingLeft: "20px", margin: 0, color: "#333" }}>
                                 {sec.points.map((pt, i) => (
-                                    <li key={i} style={{ marginBottom: "8px" }}>{pt}</li>
+                                    <li key={i} style={{ marginBottom: "8px", color: "#333", lineHeight: "1.6" }}>{pt}</li>
                                 ))}
                             </ul>
                         </div>
