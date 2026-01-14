@@ -17,7 +17,7 @@ export default function CircularRoadmap({ stagesData }) {
 
   // --- CẤU HÌNH KÍCH THƯỚC & VỊ TRÍ ---
   const CX = 450; 
-  const CY = 500; 
+  const CY = 600; 
   
   const R_STAR = 300; 
   const R_NODE = 365; 
