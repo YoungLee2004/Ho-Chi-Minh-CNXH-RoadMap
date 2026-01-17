@@ -1,5 +1,7 @@
 // src/components/ALReport.jsx
 import { useNavigate } from "react-router-dom";
+import shot3 from "../assets/Screenshot 2026-01-15 150608.png";
+import shot4 from "../assets/Screenshot 2026-01-15 150643.png";
 import "./ALReport.css";
 
 const ALReport = () => {
@@ -68,6 +70,38 @@ const ALReport = () => {
                 Quản lý trạng thái chuyển động, tính toán độ trễ (delay) và điều phối các sự kiện tương tác để trải nghiệm người dùng mượt mà nhất.
               </p>
             </div>
+          </div>
+        </section>
+
+        {/* PHẦN 3: CHỨNG MINH PROMPTS TÓM TẮT */}
+        <section className="report-section image-gallery">
+          <h2>3. Chứng Minh Prompts Tóm Tắt Nội Dung</h2>
+          <p>
+            2 ảnh chụp màn hình để chứng minh nguồn gốc tư liệu (prompts và kết quả tóm tắt) đã dùng trong quá trình soạn nội dung.
+          </p>
+          <div className="gallery-grid">
+            {[
+              {
+                src: shot3,
+                title: "Prompt: Bảng tổng hợp",
+                caption: "Ảnh chụp kết quả bảng 5 chặng (ngắn gọn) dùng làm nguồn dữ liệu roadmapData."
+              },
+              {
+                src: shot4,
+                title: "Prompt: Nội dung bullet cho card",
+                caption: "Ảnh chụp lệnh yêu cầu tạo bullet ngắn cho từng card roadmap, chứng minh nguồn tóm tắt."
+              }
+            ].map((item) => (
+              <figure className="gallery-card" key={item.title}>
+                <div className="gallery-media">
+                  <img src={item.src} alt={item.title} loading="lazy" />
+                </div>
+                <figcaption>
+                  <div className="gallery-title">{item.title}</div>
+                  <p>{item.caption}</p>
+                </figcaption>
+              </figure>
+            ))}
           </div>
         </section>
 
