@@ -5,7 +5,7 @@ import App from './App'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <BrowserRouter basename="/ho-chi-minh-cnxh-roadmap">
+  <BrowserRouter> {/* <-- Đã xóa basename, để mặc định */}
     <App />
   </BrowserRouter>
 )
